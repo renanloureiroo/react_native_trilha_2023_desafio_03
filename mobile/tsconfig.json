@@ -8,7 +8,7 @@
       "@assets": ["app/assets/index.ts"],
       "@config": ["app/shared/config/index.ts"],
       "@constants": ["app/shared/constants/index.ts"],
-      "@services": ["app/services/index.ts"],
+      "@services": ["app/shared/services/index.ts"],
       "@utils": ["app/shared/utils/index.ts"],
       "@contexts": ["app/contexts/index.ts"],
       "@hooks": ["app/hooks/index.ts"],

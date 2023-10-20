@@ -12,7 +12,7 @@ module.exports = function (api) {
             "@assets": "./app/assets",
             "@config": "./app/shared/config",
             "@constants": "./app/shared/constants",
-            "@services": "./app/services",
+            "@services": "./app/shared/services",
             "@utils": "./app/shared/utils",
             "@contexts": "./app/contexts",
             "@hooks": "./app/hooks",

@@ -2,34 +2,54 @@ import { useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
-// import { HomeScreen } from "./app/screens";
 import { useFontsLoaded } from "./app/hooks";
 
 import * as SplashScreen from "expo-splash-screen";
 import { Box, NativeBaseProvider } from "native-base";
-import { HomeScreen, SignInScreen } from "@screens";
+
 import { theme } from "./app/shared/theme";
+import { LogBox } from "react-native";
+import { setupReactotron } from "./app/shared/services/reactotron";
+import { AppNavigator } from "@navigation";
+import { AuthContextProvider } from "@contexts";
 
 SplashScreen.preventAutoHideAsync();
 
+LogBox.ignoreLogs([
+  "In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
+]);
+
+setupReactotron({
+  // clear the Reactotron window when the app loads/reloads
+  clearOnLoad: true,
+  // generally going to be localhost
+  host: "localhost",
+  // Reactotron can monitor AsyncStorage for you
+  useAsyncStorage: true,
+  // log the initial restored state from AsyncStorage
+  logInitialState: true,
+  // log out any snapshots as they happen (this is useful for debugging but slow)
+  logSnapshots: false,
+});
 export default function App() {
   const { loaded } = useFontsLoaded();
 
-  const onLayoutRootView = useCallback(async () => {
-    if (loaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) return null;
+  const onLayoutRootView = useCallback(
+    async (heydrated: boolean) => {
+      if (loaded && !heydrated) {
+        await SplashScreen.hideAsync();
+      }
+    },
+    [loaded]
+  );
 
   return (
     <SafeAreaProvider>
       <NativeBaseProvider theme={theme}>
-        <Box flex={1} onLayout={onLayoutRootView}>
-          <StatusBar translucent backgroundColor="transparent" />
-          <SignInScreen />
-        </Box>
+        <StatusBar translucent backgroundColor="transparent" />
+        <AuthContextProvider>
+          <AppNavigator onLayoutRootView={onLayoutRootView} />
+        </AuthContextProvider>
       </NativeBaseProvider>
     </SafeAreaProvider>
   );
