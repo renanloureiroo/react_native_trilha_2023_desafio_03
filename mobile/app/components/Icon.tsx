@@ -1,4 +1,10 @@
-import { Icon as NBIcon, IIconProps, useTheme, Pressable } from "native-base";
+import {
+  Icon as NBIcon,
+  IIconProps,
+  useTheme,
+  Pressable,
+  IPressableProps,
+} from "native-base";
 import { FC } from "react";
 
 import ArroLeftRegular from "../assets/icons/arrow-left-regular.svg";
@@ -62,17 +68,40 @@ const icons = {
 
 export type IconName = keyof typeof icons;
 
-interface IconProps extends SvgProps {
+interface IconProps extends SvgProps, Pick<IPressableProps, "mx"> {
   name: IconName;
   size: number;
+  pressEffect?: boolean;
 }
 
 export const Icon: FC<IconProps> = (props) => {
-  const { name, onPress, size, color = "#000000", ...rest } = props;
+  const {
+    name,
+    onPress,
+    size,
+    color = "#000000",
+    pressEffect = true,
+    ...rest
+  } = props;
 
   const { colors } = useTheme();
 
   const IconComponent = icons[name];
+
+  if (onPress && !pressEffect) {
+    return (
+      <Pressable
+        onPress={onPress}
+        alignItems={"center"}
+        justifyContent={"center"}
+        {...rest}
+      >
+        {({ isPressed }) => (
+          <IconComponent color={color} width={size} height={size} />
+        )}
+      </Pressable>
+    );
+  }
 
   if (onPress) {
     return (
@@ -87,6 +116,7 @@ export const Icon: FC<IconProps> = (props) => {
         }}
         alignItems={"center"}
         justifyContent={"center"}
+        {...rest}
       >
         {({ isPressed }) => (
           <IconComponent color={color} width={size} height={size} {...rest} />

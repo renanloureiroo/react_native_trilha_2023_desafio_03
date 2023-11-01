@@ -1,3 +1,4 @@
+import { configNavigatorDefault } from "@config";
 import { NavigationProp, RouteProp } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SignInScreen, SignUpScreen } from "@screens";
@@ -19,15 +20,7 @@ const { Navigator, Screen } =
 
 export const AuthStackNagivator = () => {
   return (
-    <Navigator
-      screenOptions={{
-        headerShown: false,
-        contentStyle: {
-          backgroundColor: "transparent",
-        },
-      }}
-      initialRouteName="SignIn"
-    >
+    <Navigator screenOptions={configNavigatorDefault} initialRouteName="SignIn">
       <Screen name="SignIn" component={SignInScreen} />
       <Screen name="SignUp" component={SignUpScreen} />
     </Navigator>

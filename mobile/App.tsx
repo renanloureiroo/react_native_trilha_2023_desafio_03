@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFontsLoaded } from "./app/hooks";
@@ -10,13 +11,15 @@ import { Box, NativeBaseProvider } from "native-base";
 import { theme } from "./app/shared/theme";
 import { LogBox } from "react-native";
 import { setupReactotron } from "./app/shared/services/reactotron";
-import { AppNavigator } from "@navigation";
+import { MainNavigator } from "@navigation";
 import { AuthContextProvider } from "@contexts";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 SplashScreen.preventAutoHideAsync();
 
 LogBox.ignoreLogs([
   "In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
+  'fontFamily "bold" is not a system font and has not been loaded through Font.loadAsync.',
 ]);
 
 setupReactotron({
@@ -43,14 +46,24 @@ export default function App() {
     [loaded]
   );
 
+  if (!loaded) return null;
+
   return (
-    <SafeAreaProvider>
+    <GestureHandlerRootView
+      style={{
+        flex: 1,
+      }}
+    >
       <NativeBaseProvider theme={theme}>
-        <StatusBar translucent backgroundColor="transparent" />
-        <AuthContextProvider>
-          <AppNavigator onLayoutRootView={onLayoutRootView} />
-        </AuthContextProvider>
+        <BottomSheetModalProvider>
+          <SafeAreaProvider>
+            <StatusBar translucent backgroundColor="transparent" />
+            <AuthContextProvider>
+              <MainNavigator onLayoutRootView={onLayoutRootView} />
+            </AuthContextProvider>
+          </SafeAreaProvider>
+        </BottomSheetModalProvider>
       </NativeBaseProvider>
-    </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

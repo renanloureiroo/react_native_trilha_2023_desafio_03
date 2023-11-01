@@ -4,11 +4,13 @@ import {
   createContext,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { config } from "@config";
 import { api, createSession } from "@services";
 import { storage } from "@utils";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 export type User = {
   id: string;
@@ -28,6 +30,7 @@ interface IAuthContextProps {
   heydrated: boolean;
   signIn: (params: SignInParams) => Promise<void>;
   signOut: () => Promise<void>;
+  bottomSheetRef: React.RefObject<BottomSheetModal>;
 }
 
 export const AuthContext = createContext({} as IAuthContextProps);
@@ -40,6 +43,7 @@ export const AuthContextProvider: FC<IAuthContextProviderProps> = ({
 }) => {
   const [heydrated, setHeydrated] = useState<boolean>(true);
   const [user, setUser] = useState<User>({} as User);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   const signIn = useCallback(async (params: SignInParams) => {
     try {
@@ -96,6 +100,7 @@ export const AuthContextProvider: FC<IAuthContextProviderProps> = ({
         signIn,
         signOut,
         heydrated,
+        bottomSheetRef,
       }}
     >
       {children}

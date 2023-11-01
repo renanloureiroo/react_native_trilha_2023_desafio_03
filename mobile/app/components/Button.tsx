@@ -23,6 +23,7 @@ export const Button: FC<ButtonProps> = (props) => {
       flex={1}
       w={"full"}
       rounded={6}
+      minHeight={12}
       bg={bgColor}
       _text={{
         fontWeight: "bold",
@@ -34,10 +35,16 @@ export const Button: FC<ButtonProps> = (props) => {
         android_ripple: {
           color: variant === "gray" ? colors.gray[100] : colors.gray[600],
         },
+        _disabled: {
+          opacity: 0.5,
+        },
       }}
       _ios={{
         _pressed: {
           opacity: 0.7,
+        },
+        _disabled: {
+          opacity: 0.5,
         },
       }}
       _pressed={{

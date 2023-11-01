@@ -21,7 +21,8 @@ export const Avatar: FC<AvatarProps> = (props) => {
     isPicker = false,
     onPress,
     size = "xl",
-
+    borderColor = "blue.700",
+    borderWidth = 3,
     ...rest
   } = props;
   const { colors } = useTheme();
@@ -45,8 +46,8 @@ export const Avatar: FC<AvatarProps> = (props) => {
     >
       <NBAvatar
         size={size}
-        borderWidth={3}
-        borderColor={"blue.700"}
+        borderWidth={borderWidth}
+        borderColor={borderColor}
         bgColor={"gray.500"}
         source={photo ? { uri: photo } : AvatarDefault}
       >
